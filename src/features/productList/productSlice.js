@@ -79,6 +79,9 @@ export const { setProducts, setCategory, setSortOrder, setCurrentSearch } =
 
 export const selectFilteredProducts = (state) => state.product.filteredItems;
 
+export const selectCurrentProduct = (state, productId) =>
+  state.product.items.find((product) => product.id === productId);
+
 export const selectAllCategories = (state) => {
   return [...new Set(state.product.items.map((product) => product.category))];
 };

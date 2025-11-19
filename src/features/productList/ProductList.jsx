@@ -15,25 +15,40 @@ import {
   selectCurrentSearch,
 } from "./productSlice";
 import { SearchIcon } from "lucide-react";
+import ProductModalContent from "./ProductModal";
+import Modal from "@/components/Modal";
 
 const ProductList = () => {
   const [isLoading, setLoading] = useState(false);
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
+
   const dispatch = useDispatch();
 
   const productsToRender = useSelector(selectFilteredProducts);
   const categories = useSelector(selectAllCategories);
-
   const currentCategory = useSelector(selectCurrentCategory);
   const currentSort = useSelector(selectCurrentSort);
-
   const currentSearch = useSelector(selectCurrentSearch);
-  console.log("current search: ", currentSearch);
+
   const [keyword, setKeyword] = useState("");
+
+  const handleShowDetail = (id) => {
+    setSelectedProductId(id);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedProductId(null);
+  };
+
+  console.log("current search: ", currentSearch);
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setKeyword(value);
-
     dispatch(setCurrentSearch(value));
   };
 
@@ -44,7 +59,7 @@ const ProductList = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      if (productsToRender.length > 0 && !isLoading) return;
+      if (productsToRender.length > 0) return;
 
       setLoading(true);
       try {
@@ -58,7 +73,7 @@ const ProductList = () => {
       }
     };
     fetchProducts();
-  }, [dispatch]);
+  }, [dispatch, productsToRender.length]);
 
   const handleSortChange = (e) => {
     dispatch(setSortOrder(e.target.value));
@@ -79,11 +94,8 @@ const ProductList = () => {
   return (
     <div className="w-full min-h-screen bg-slate-50 py-8">
       <div className="max-w-6xl mx-auto px-4 space-y-6">
-        {/* Filter bar */}
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          {/* Left: Category & Sort */}
           <div className="flex flex-wrap gap-4">
-            {/* Category */}
             <div className="flex flex-col">
               <label className="text-xs font-semibold text-slate-500 mb-1">
                 Category
@@ -102,7 +114,6 @@ const ProductList = () => {
               </select>
             </div>
 
-            {/* Sort */}
             <div className="flex flex-col">
               <label className="text-xs font-semibold text-slate-500 mb-1">
                 Sort By
@@ -121,7 +132,6 @@ const ProductList = () => {
             </div>
           </div>
 
-          {/* Right: Search */}
           <form onSubmit={handleSearch} className="w-full md:w-auto">
             <label className="text-xs font-semibold text-slate-500 mb-1 block">
               Search Product
@@ -143,11 +153,14 @@ const ProductList = () => {
           </form>
         </div>
 
-        {/* Product grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {productsToRender.length > 0 ? (
             productsToRender.map((product) => (
-              <ProductCard key={product.id} item={product} />
+              <ProductCard
+                key={product.id}
+                item={product}
+                onShowDetail={handleShowDetail}
+              />
             ))
           ) : (
             <div className="col-span-full text-center text-slate-500 mt-10 text-sm">
@@ -155,6 +168,15 @@ const ProductList = () => {
             </div>
           )}
         </div>
+
+        {showModal && selectedProductId && (
+          <Modal onClose={handleCloseModal}>
+            <ProductModalContent
+              productId={selectedProductId}
+              onClose={handleCloseModal}
+            />
+          </Modal>
+        )}
       </div>
     </div>
   );
