@@ -11,7 +11,10 @@ import {
   setProducts,
   setCategory,
   setSortOrder,
+  setCurrentSearch,
+  selectCurrentSearch,
 } from "./productSlice";
+import { SearchIcon } from "lucide-react";
 
 const ProductList = () => {
   const [isLoading, setLoading] = useState(false);
@@ -22,6 +25,22 @@ const ProductList = () => {
 
   const currentCategory = useSelector(selectCurrentCategory);
   const currentSort = useSelector(selectCurrentSort);
+
+  const currentSearch = useSelector(selectCurrentSearch);
+  console.log("current search: ", currentSearch);
+  const [keyword, setKeyword] = useState("");
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setKeyword(value);
+
+    dispatch(setCurrentSearch(value));
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    dispatch(setCurrentSearch(keyword));
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -58,54 +77,84 @@ const ProductList = () => {
   }
 
   return (
-    <div className="w-full h-full py-4">
-      <div className="mb-6 flex flex-wrap items-center gap-4 px-4 bg-gray-50 p-4 rounded-lg">
-        <div className="flex flex-col">
-          <label className="text-xs font-semibold text-gray-500 mb-1">
-            Category
-          </label>
-          <select
-            value={currentCategory}
-            onChange={handleCategoryChange}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none"
-          >
-            <option value="">All Categories</option>
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </div>
+    <div className="w-full min-h-screen bg-slate-50 py-8">
+      <div className="max-w-6xl mx-auto px-4 space-y-6">
+        {/* Filter bar */}
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          {/* Left: Category & Sort */}
+          <div className="flex flex-wrap gap-4">
+            {/* Category */}
+            <div className="flex flex-col">
+              <label className="text-xs font-semibold text-slate-500 mb-1">
+                Category
+              </label>
+              <select
+                value={currentCategory}
+                onChange={handleCategoryChange}
+                className="rounded-xl border border-slate-200 px-3 py-2 text-sm bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="">All Categories</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-        <div className="flex flex-col">
-          <label className="text-xs font-semibold text-gray-500 mb-1">
-            Sort By
-          </label>
-          <select
-            value={currentSort}
-            onChange={handleSortChange}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none"
-          >
-            <option value="none">Default</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="name-a-z">Name: A-Z</option>
-            <option value="name-z-a">Name: Z-A</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
-        {productsToRender.length > 0 ? (
-          productsToRender.map((product) => (
-            <ProductCard key={product.id} item={product} />
-          ))
-        ) : (
-          <div className="col-span-full text-center text-gray-500 mt-10">
-            No products found based on your filter.
+            {/* Sort */}
+            <div className="flex flex-col">
+              <label className="text-xs font-semibold text-slate-500 mb-1">
+                Sort By
+              </label>
+              <select
+                value={currentSort}
+                onChange={handleSortChange}
+                className="rounded-xl border border-slate-200 px-3 py-2 text-sm bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="none">Default</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="name-a-z">Name: A-Z</option>
+                <option value="name-z-a">Name: Z-A</option>
+              </select>
+            </div>
           </div>
-        )}
+
+          {/* Right: Search */}
+          <form onSubmit={handleSearch} className="w-full md:w-auto">
+            <label className="text-xs font-semibold text-slate-500 mb-1 block">
+              Search Product
+            </label>
+            <div className="relative w-full md:w-[320px] lg:w-[380px]">
+              <SearchIcon
+                size={18}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              />
+              <input
+                type="text"
+                className="w-full pl-10 pr-3 py-2 rounded-full border border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="Cari berdasarkan nama produk..."
+                name="keyword"
+                value={keyword}
+                onChange={handleSearchChange}
+              />
+            </div>
+          </form>
+        </div>
+
+        {/* Product grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {productsToRender.length > 0 ? (
+            productsToRender.map((product) => (
+              <ProductCard key={product.id} item={product} />
+            ))
+          ) : (
+            <div className="col-span-full text-center text-slate-500 mt-10 text-sm">
+              No products found based on your filter.
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

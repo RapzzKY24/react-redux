@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 
 const Header = ({ handleOpenModalCart }) => {
   const totalCartItem = useSelector(selectorTotalCartItem);
+
   return (
     <div className="bg-indigo-700">
       <div className="max-w-7xl mx-auto px-4">
@@ -21,7 +22,7 @@ const Header = ({ handleOpenModalCart }) => {
                 {totalCartItem}
               </span>
             ) : (
-              <span className="hidden"></span>
+              <span className="hidden" />
             )}
             <ShoppingCart size={24} />
           </button>

@@ -5,6 +5,7 @@ const initialState = {
   filteredItems: [],
   currentCategory: "",
   currentSort: "none",
+  currentSearch: "",
 };
 
 export const productSlice = createSlice({
@@ -28,6 +29,11 @@ export const productSlice = createSlice({
       console.log(state.currentSort);
       applyFilterAndSort(state);
     },
+    setCurrentSearch: (state, action) => {
+      state.currentSearch = action.payload;
+      console.log("current state", state.currentSearch);
+      applyFilterAndSort(state);
+    },
   },
 });
 
@@ -37,6 +43,14 @@ const applyFilterAndSort = (state) => {
   if (state.currentCategory && state.currentCategory !== "") {
     tempItems = tempItems.filter(
       (product) => product.category === state.currentCategory
+    );
+  }
+
+  if (state.currentSearch && state.currentSearch.trim() !== "") {
+    const search = state.currentSearch.trim().toLowerCase();
+
+    tempItems = tempItems.filter((product) =>
+      product.title.toLowerCase().includes(search)
     );
   }
 
@@ -60,7 +74,8 @@ const applyFilterAndSort = (state) => {
   state.filteredItems = tempItems;
 };
 
-export const { setProducts, setCategory, setSortOrder } = productSlice.actions;
+export const { setProducts, setCategory, setSortOrder, setCurrentSearch } =
+  productSlice.actions;
 
 export const selectFilteredProducts = (state) => state.product.filteredItems;
 
@@ -70,5 +85,6 @@ export const selectAllCategories = (state) => {
 
 export const selectCurrentCategory = (state) => state.product.currentCategory;
 export const selectCurrentSort = (state) => state.product.currentSort;
+export const selectCurrentSearch = (state) => state.product.currentSearch;
 
 export default productSlice.reducer;
