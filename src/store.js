@@ -5,6 +5,6 @@ import productSlice from "./features/productList/productSlice";
 export default configureStore({
   reducer: {
     cart: cartSlice.reducer,
-    product: productSlice.reducer,
+    product: productSlice,
   },
 });

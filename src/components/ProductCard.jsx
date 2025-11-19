@@ -1,9 +1,4 @@
-import {
-  addItemToCart,
-  removeItemFromCart,
-  selectorCartItem,
-  selectorTotalCartItem,
-} from "@/features/cart/cartSlice";
+import { addItemToCart } from "@/features/cart/cartSlice";
 import Image from "next/image";
 import { useDispatch } from "react-redux";
 
