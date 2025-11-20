@@ -40,38 +40,47 @@ export default configureStore({
     product: productSlice,        // Handle logika display produk
   },
 });
+````
 
-🚀 Cara Instalasi & Menjalankan
+## 🚀 Cara Instalasi & Menjalankan
+
 Ikuti langkah-langkah berikut untuk menjalankan proyek di komputer lokal Anda:
 
-Clone repository:
+1.  **Clone repository:**
 
-Bash
+    ```bash
+    git clone <repository-url>
+    cd react-redux
+    ```
 
-git clone <repository-url>
-cd react-redux
-Install dependencies:
+2.  **Install dependencies:**
 
-Bash
+    ```bash
+    npm install
+    ```
 
-npm install
-Jalankan Development Server:
+3.  **Jalankan Development Server:**
 
-Bash
+    ```bash
+    npm run dev
+    ```
 
-npm run dev
-Buka Aplikasi: Akses http://localhost:3000 di browser Anda.
+4.  **Buka Aplikasi:**
+    Akses [http://localhost:3000](https://www.google.com/search?q=http://localhost:3000) di browser Anda.
 
-📜 Skrip Tersedia
-npm run dev: Menjalankan server development Next.js.
+## 📜 Skrip Tersedia
 
-npm run build: Membuild aplikasi untuk production.
+  * `npm run dev`: Menjalankan server development Next.js.
+  * `npm run build`: Membuild aplikasi untuk production.
+  * `npm run start`: Menjalankan server production.
+  * `npm run lint`: Menjalankan ESLint untuk pengecekan kode.
 
-npm run start: Menjalankan server production.
+## 📄 Lisensi
 
-npm run lint: Menjalankan ESLint untuk pengecekan kode.
+Proyek ini dibuat untuk tujuan pembelajaran (**Course Redux Toolkit**).
 
-📄 Lisensi
-Proyek ini dibuat untuk tujuan pembelajaran (Course Redux Toolkit).
 
 Copyright © 2025 RapzzKY
+
+```
+```
