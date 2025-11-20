@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# React Redux E-Commerce Store
 
-## Getting Started
+Aplikasi E-Commerce modern yang dibangun menggunakan **Next.js 16** dan **React 19**, dengan fokus utama pada implementasi **Redux Toolkit** untuk manajemen state global yang efisien. Proyek ini mendemonstrasikan cara mengelola data produk (filtering, sorting, searching) dan keranjang belanja (cart) secara *seamless*.
 
-First, run the development server:
+## 🛠 Tech Stack
 
-```bash
+* **Framework:** [Next.js 16](https://nextjs.org/) (App Router)
+* **Library:** [React 19](https://react.dev/)
+* **State Management:** [Redux Toolkit](https://redux-toolkit.js.org/) & React-Redux
+* **Styling:** [Tailwind CSS 4](https://tailwindcss.com/)
+* **Icons:** Lucide React
+
+## ✨ Fitur Utama
+
+### 🛍️ Manajemen Produk (`productSlice`)
+Fitur pengelolaan tampilan produk yang dinamis tanpa reload halaman:
+* **Search Real-time:** Mencari produk berdasarkan nama.
+* **Filtering Kategori:** Menyaring produk berdasarkan kategori tertentu.
+* **Advanced Sorting:** Mengurutkan produk berdasarkan:
+    * Harga (Termurah - Termahal)
+    * Harga (Termahal - Termurah)
+    * Nama (A - Z)
+    * Nama (Z - A)
+
+### 🛒 Keranjang Belanja (`cartSlice`)
+Sistem keranjang belanja yang reaktif:
+* **Add to Cart:** Menambahkan item baru atau menambah jumlah item yang sudah ada.
+* **Remove/Decrease Item:** Mengurangi jumlah item atau menghapusnya jika jumlah mencapai nol.
+* **Auto Calculation:** Penghitungan total harga dan total item secara otomatis menggunakan selector.
+
+## 📂 Struktur Redux Store
+
+Aplikasi ini menggunakan **feature-based structure** untuk Redux:
+
+```javascript
+// src/store.js
+export default configureStore({
+  reducer: {
+    cart: cartSlice.reducer,      // Handle logika keranjang
+    product: productSlice,        // Handle logika display produk
+  },
+});
+
+🚀 Cara Instalasi & Menjalankan
+Ikuti langkah-langkah berikut untuk menjalankan proyek di komputer lokal Anda:
+
+Clone repository:
+
+Bash
+
+git clone <repository-url>
+cd react-redux
+Install dependencies:
+
+Bash
+
+npm install
+Jalankan Development Server:
+
+Bash
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Buka Aplikasi: Akses http://localhost:3000 di browser Anda.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+📜 Skrip Tersedia
+npm run dev: Menjalankan server development Next.js.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+npm run build: Membuild aplikasi untuk production.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+npm run start: Menjalankan server production.
 
-## Learn More
+npm run lint: Menjalankan ESLint untuk pengecekan kode.
 
-To learn more about Next.js, take a look at the following resources:
+📄 Lisensi
+Proyek ini dibuat untuk tujuan pembelajaran (Course Redux Toolkit).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Copyright © 2025 RapzzKY
