@@ -1,8 +1,9 @@
-"use client";
-import ProductCard from "@/components/ProductCard";
-import React, { useEffect, useState } from "react";
-import { Oval } from "react-loader-spinner";
-import { useDispatch, useSelector } from "react-redux";
+"use client"
+
+import ProductCard from "@/components/ProductCard"
+import React, { useEffect, useState } from "react"
+import { Oval } from "react-loader-spinner"
+import { useDispatch, useSelector } from "react-redux"
 import {
   selectAllCategories,
   selectFilteredProducts,
@@ -13,87 +14,96 @@ import {
   setSortOrder,
   setCurrentSearch,
   selectCurrentSearch,
-} from "./productSlice";
-import { SearchIcon } from "lucide-react";
-import ProductModalContent from "./ProductModal";
-import Modal from "@/components/Modal";
+  selectWishlistIds,
+  setWhislistItem,
+} from "./productSlice"
+import { SearchIcon } from "lucide-react"
+import ProductModalContent from "./ProductModal"
+import Modal from "@/components/Modal"
 
 const ProductList = () => {
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+  const [selectedProductId, setSelectedProductId] = useState(null)
 
-  const [showModal, setShowModal] = useState(false);
-  const [selectedProductId, setSelectedProductId] = useState(null);
+  const dispatch = useDispatch()
 
-  const dispatch = useDispatch();
+  const productsToRender = useSelector(selectFilteredProducts)
+  const categories = useSelector(selectAllCategories)
+  const currentCategory = useSelector(selectCurrentCategory)
+  const currentSort = useSelector(selectCurrentSort)
+  const currentSearch = useSelector(selectCurrentSearch)
+  const wishlistIds = useSelector(selectWishlistIds)
 
-  const productsToRender = useSelector(selectFilteredProducts);
-  const categories = useSelector(selectAllCategories);
-  const currentCategory = useSelector(selectCurrentCategory);
-  const currentSort = useSelector(selectCurrentSort);
-  const currentSearch = useSelector(selectCurrentSearch);
+  const [keyword, setKeyword] = useState("")
 
-  const [keyword, setKeyword] = useState("");
+  const handleIsWhislist = (id) => {
+    console.log("Clicked wishlist for id: ", id)
+    console.log("Current wishlist ids: ", wishlistIds)
+    dispatch(setWhislistItem(id))
+  }
 
   const handleShowDetail = (id) => {
-    setSelectedProductId(id);
-    setShowModal(true);
-  };
+    setSelectedProductId(id)
+    setShowModal(true)
+  }
 
   const handleCloseModal = () => {
-    setShowModal(false);
-    setSelectedProductId(null);
-  };
+    setShowModal(false)
+    setSelectedProductId(null)
+  }
 
-  console.log("current search: ", currentSearch);
+  console.log("current search: ", currentSearch)
 
   const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setKeyword(value);
-    dispatch(setCurrentSearch(value));
-  };
+    const value = e.target.value
+    setKeyword(value)
+    dispatch(setCurrentSearch(value))
+  }
 
   const handleSearch = (e) => {
-    e.preventDefault();
-    dispatch(setCurrentSearch(keyword));
-  };
+    e.preventDefault()
+    dispatch(setCurrentSearch(keyword))
+  }
 
   useEffect(() => {
     const fetchProducts = async () => {
-      if (productsToRender.length > 0) return;
+      if (productsToRender.length > 0) return
 
-      setLoading(true);
+      setLoading(true)
       try {
-        const response = await fetch("https://fakestoreapi.com/products");
-        const responseJson = await response.json();
-        dispatch(setProducts(responseJson));
+        const response = await fetch("https://fakestoreapi.com/products")
+        const responseJson = await response.json()
+        dispatch(setProducts(responseJson))
       } catch (error) {
-        console.log("Error: ", error);
+        console.log("Error: ", error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
-    fetchProducts();
-  }, [dispatch, productsToRender.length]);
+    }
+    fetchProducts()
+  }, [dispatch, productsToRender.length])
 
   const handleSortChange = (e) => {
-    dispatch(setSortOrder(e.target.value));
-  };
+    dispatch(setSortOrder(e.target.value))
+  }
 
   const handleCategoryChange = (e) => {
-    dispatch(setCategory(e.target.value));
-  };
+    dispatch(setCategory(e.target.value))
+  }
 
   if (isLoading) {
     return (
       <div className="flex min-h-screen justify-center items-center">
         <Oval color="blue" />
       </div>
-    );
+    )
   }
 
   return (
     <div className="w-full min-h-screen bg-slate-50 py-8">
       <div className="max-w-6xl mx-auto px-4 space-y-6">
+        {/* FILTER BAR */}
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="flex flex-wrap gap-4">
             <div className="flex flex-col">
@@ -153,6 +163,7 @@ const ProductList = () => {
           </form>
         </div>
 
+        {/* PRODUCT GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {productsToRender.length > 0 ? (
             productsToRender.map((product) => (
@@ -160,6 +171,8 @@ const ProductList = () => {
                 key={product.id}
                 item={product}
                 onShowDetail={handleShowDetail}
+                onWhislist={handleIsWhislist}
+                isWhislisted={wishlistIds.includes(product.id)} // <-- BOOL per product
               />
             ))
           ) : (
@@ -169,6 +182,7 @@ const ProductList = () => {
           )}
         </div>
 
+        {/* MODAL DETAIL */}
         {showModal && selectedProductId && (
           <Modal onClose={handleCloseModal}>
             <ProductModalContent
@@ -179,7 +193,7 @@ const ProductList = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProductList;
+export default ProductList
