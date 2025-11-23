@@ -14,24 +14,20 @@ export const productSlice = createSlice({
   reducers: {
     setProducts: (state, action) => {
       state.items = action.payload;
-      console.log(state.items);
       state.filteredItems = action.payload;
     },
 
     setCategory: (state, action) => {
       state.currentCategory = action.payload;
-      console.log(state.currentCategory);
       applyFilterAndSort(state);
     },
 
     setSortOrder: (state, action) => {
       state.currentSort = action.payload;
-      console.log(state.currentSort);
       applyFilterAndSort(state);
     },
     setCurrentSearch: (state, action) => {
       state.currentSearch = action.payload;
-      console.log("current state", state.currentSearch);
       applyFilterAndSort(state);
     },
   },
@@ -74,9 +70,6 @@ const applyFilterAndSort = (state) => {
   state.filteredItems = tempItems;
 };
 
-export const { setProducts, setCategory, setSortOrder, setCurrentSearch } =
-  productSlice.actions;
-
 export const selectFilteredProducts = (state) => state.product.filteredItems;
 
 export const selectCurrentProduct = (state, productId) =>
@@ -90,4 +83,6 @@ export const selectCurrentCategory = (state) => state.product.currentCategory;
 export const selectCurrentSort = (state) => state.product.currentSort;
 export const selectCurrentSearch = (state) => state.product.currentSearch;
 
+export const { setProducts, setCategory, setSortOrder, setCurrentSearch } =
+  productSlice.actions;
 export default productSlice.reducer;
